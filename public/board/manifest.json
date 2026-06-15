@@ -1,0 +1,70 @@
+{
+  "chapters": [
+    {
+      "slug": "01-overview",
+      "label": "Overview",
+      "w": 2000,
+      "h": 2240
+    },
+    {
+      "slug": "02-research",
+      "label": "Research",
+      "w": 2000,
+      "h": 1073
+    },
+    {
+      "slug": "03-insights",
+      "label": "Insights",
+      "w": 2000,
+      "h": 2270
+    },
+    {
+      "slug": "04-prioritize",
+      "label": "Prioritize",
+      "w": 2000,
+      "h": 2063
+    },
+    {
+      "slug": "05-field",
+      "label": "Field Study",
+      "w": 2000,
+      "h": 1583
+    },
+    {
+      "slug": "06-interviews",
+      "label": "Interviews",
+      "w": 2000,
+      "h": 2229
+    },
+    {
+      "slug": "07-personas",
+      "label": "Personas",
+      "w": 2000,
+      "h": 2745
+    },
+    {
+      "slug": "08-solutions",
+      "label": "Solutions",
+      "w": 2000,
+      "h": 3453
+    },
+    {
+      "slug": "09-experience",
+      "label": "Experience",
+      "w": 2000,
+      "h": 2167
+    },
+    {
+      "slug": "10-after",
+      "label": "After",
+      "w": 2000,
+      "h": 1375
+    },
+    {
+      "slug": "11-roadmap",
+      "label": "Roadmap",
+      "w": 2000,
+      "h": 1825
+    }
+  ]
+}

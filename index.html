@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SBI Branch Modernization @ IISc — UX Case Study</title>
+<meta name="description" content="SBI Branch Modernization @ IISc Campus — transforming the branch into a smart, efficient, walk-in experience. A UX research & service-design case study by Yash Dudhpachare." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --indigo: #2c2480;
+    --indigo-deep: #1a1556;
+    --blue: #0aa0e0;
+    --blue-deep: #0b78c4;
+    --violet: #6b5cf0;
+    --ink: #211d49;
+    --muted: #6f6b97;
+    --nav-bg: rgba(244, 243, 255, 0.82);
+    --ring: rgba(44, 36, 128, 0.14);
+    --maxw: 1040px;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    font-family: "Inter", system-ui, sans-serif;
+    color: var(--ink);
+    background:
+      radial-gradient(1100px 700px at 10% -5%, #e7e3ff 0%, transparent 55%),
+      radial-gradient(1000px 820px at 100% 4%, #d7ecfc 0%, transparent 55%),
+      radial-gradient(1200px 1000px at 50% 110%, #d6e9ff 0%, transparent 60%),
+      linear-gradient(180deg, #f4f2ff 0%, #eef4ff 48%, #eaf5fe 100%);
+    background-attachment: fixed;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { color: inherit; }
+
+  /* ---------- top nav ---------- */
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--nav-bg);
+    backdrop-filter: saturate(150%) blur(14px);
+    -webkit-backdrop-filter: saturate(150%) blur(14px);
+    border-bottom: 1px solid rgba(44, 36, 128, 0.1);
+  }
+  .nav-inner {
+    max-width: 1240px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 10px 20px;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    text-decoration: none;
+    flex: none;
+  }
+  .brand .logo {
+    width: 34px; height: 34px; border-radius: 10px; flex: none;
+    display: grid; place-items: center;
+    background: linear-gradient(140deg, var(--indigo) 0%, var(--blue) 120%);
+    color: #fff; font-family: "Poppins", sans-serif; font-weight: 700;
+    font-size: 12px; letter-spacing: 0.5px;
+    box-shadow: 0 4px 12px rgba(44, 36, 128, 0.3);
+  }
+  .brand .txt {
+    font-family: "Poppins", sans-serif;
+    font-weight: 600;
+    color: var(--indigo);
+    font-size: 16px;
+    line-height: 1.1;
+    letter-spacing: 0.2px;
+  }
+  .brand .txt small {
+    display: block;
+    font-family: "Inter", sans-serif;
+    font-weight: 500;
+    font-size: 11px;
+    color: var(--blue-deep);
+    letter-spacing: 0.4px;
+    margin-top: 1px;
+  }
+
+  .chapters {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    overflow: visible;
+    scrollbar-width: none;
+    margin-left: auto;
+    padding: 4px 0;
+    -webkit-overflow-scrolling: touch;
+  }
+  .chapters::-webkit-scrollbar { display: none; }
+
+  .chapters a {
+    --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+    position: relative;
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--indigo-deep);
+    height: 34px;
+    min-width: 34px;
+    padding: 0 6px;
+    border-radius: 999px;
+    white-space: nowrap;
+    background: rgba(44, 36, 128, 0.07);
+    transition: color 0.25s ease, background 0.25s ease,
+      padding 0.34s var(--ease), box-shadow 0.25s ease;
+  }
+  .chapters a .num { line-height: 1; }
+  .chapters a .lbl {
+    display: inline-block;
+    max-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    opacity: 0;
+    margin-left: 0;
+    transition: max-width 0.34s var(--ease), opacity 0.2s ease,
+      margin-left 0.34s var(--ease);
+  }
+
+  .chapters a:hover {
+    background: rgba(44, 36, 128, 0.12);
+    color: var(--muted);
+    padding: 0 14px 0 11px;
+  }
+  .chapters a:hover .lbl { max-width: var(--lblw, 160px); opacity: 0.85; margin-left: 6px; }
+
+  .chapters a.active {
+    color: #fff;
+    padding: 0 15px 0 12px;
+    background: linear-gradient(135deg, var(--indigo) 0%, var(--blue) 130%);
+    box-shadow: 0 4px 14px rgba(44, 36, 128, 0.32);
+  }
+  .chapters a.active:hover { color: #fff; }
+  .chapters a.active .lbl { max-width: var(--lblw, 160px); opacity: 1; margin-left: 7px; }
+  .chapters a:focus-visible,
+  .lb-close:focus-visible {
+    outline: 2px solid #fff;
+    box-shadow: 0 0 0 4px rgba(44, 36, 128, 0.45);
+  }
+
+  /* ---------- chapter sections ---------- */
+  main { padding: 28px 0 60px; }
+  .chapter {
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding: 0 24px;
+    scroll-margin-top: 84px;
+  }
+
+  .divider {
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding: 26px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+  }
+  .divider .dot { width: 7px; height: 7px; border-radius: 999px; background: rgba(44, 36, 128, 0.26); }
+
+  .frame {
+    border-radius: 22px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.5);
+    box-shadow: 0 22px 60px rgba(44, 36, 128, 0.16), 0 2px 0 rgba(255, 255, 255, 0.7) inset;
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    cursor: zoom-in;
+    line-height: 0;
+  }
+  .frame img { width: 100%; height: auto; display: block; }
+
+  footer {
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding: 50px 24px 28px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+  }
+  footer strong { color: var(--indigo); font-family: "Poppins", sans-serif; font-weight: 600; }
+
+  /* ---------- lightbox ---------- */
+  .lb {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    background: rgba(16, 14, 40, 0.86);
+    backdrop-filter: blur(6px);
+    display: none;
+    overflow: auto;
+    cursor: zoom-out;
+    padding: 24px;
+  }
+  .lb.open { display: block; }
+  .lb img {
+    display: block;
+    margin: 0 auto;
+    max-width: 1200px;
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55);
+  }
+  .lb-close {
+    position: fixed;
+    top: 16px;
+    right: 20px;
+    color: #fff;
+    background: transparent;
+    border: 0;
+    font-size: 30px;
+    font-family: "Poppins", sans-serif;
+    cursor: pointer;
+    line-height: 1;
+    opacity: 0.85;
+  }
+  .lb-close:hover { opacity: 1; }
+
+  @media (max-width: 760px) {
+    .brand .txt small { display: none; }
+    .divider { padding: 18px 24px; }
+    .chapters { overflow-x: auto; overflow-y: visible; }
+  }
+</style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a class="brand" href="#01-overview">
+        <span class="logo">SBI</span>
+        <span class="txt">Branch Modernization<small>@ IISc Campus · 2040</small></span>
+      </a>
+      <div class="chapters" id="chapters"></div>
+    </div>
+  </nav>
+
+  <main id="main"></main>
+
+  <footer>
+    <p><strong>SBI Branch Modernization</strong> · @ IISc Campus</p>
+    <p>UX case study by Yash Dudhpachare · Built from the original project board.</p>
+  </footer>
+
+  <div class="lb" id="lb">
+    <button class="lb-close" id="lbClose" type="button" aria-label="Close image viewer">✕</button>
+    <img id="lbImg" alt="" />
+  </div>
+
+  <script>
+    const CHAPTERS = [
+      { slug: "01-overview",   label: "Overview" },
+      { slug: "02-research",   label: "Research" },
+      { slug: "03-insights",   label: "Insights" },
+      { slug: "04-prioritize", label: "Prioritize" },
+      { slug: "05-field",      label: "Field Study" },
+      { slug: "06-interviews", label: "Interviews" },
+      { slug: "07-personas",   label: "Personas" },
+      { slug: "08-solutions",  label: "Solutions" },
+      { slug: "09-experience", label: "Experience" },
+      { slug: "10-after",      label: "After" },
+      { slug: "11-roadmap",    label: "Roadmap" },
+    ];
+
+    const nav = document.getElementById("chapters");
+    const main = document.getElementById("main");
+
+    CHAPTERS.forEach((c, i) => {
+      const a = document.createElement("a");
+      a.href = "#" + c.slug;
+      a.dataset.slug = c.slug;
+      const badge = i === 0 ? "⌂" : i;
+      a.innerHTML = `<span class="num">${badge}</span><span class="lbl">${c.label}</span>`;
+      nav.appendChild(a);
+      const lbl = a.querySelector(".lbl");
+      lbl.style.maxWidth = "none";
+      a.style.setProperty("--lblw", lbl.scrollWidth + 1 + "px");
+      lbl.style.maxWidth = "";
+
+      if (i > 0) {
+        const div = document.createElement("div");
+        div.className = "divider";
+        div.innerHTML = `<span class="dot"></span><span class="dot"></span><span class="dot"></span>`;
+        main.appendChild(div);
+      }
+
+      const section = document.createElement("section");
+      section.className = "chapter";
+      section.id = c.slug;
+      section.innerHTML = `
+        <div class="frame" data-src="public/board/${c.slug}.jpg">
+          <picture>
+            <source srcset="public/board/${c.slug}.webp" type="image/webp" />
+            <img src="public/board/${c.slug}.jpg" alt="${c.label} — SBI Branch Modernization case study" loading="lazy" />
+          </picture>
+        </div>`;
+      main.appendChild(section);
+    });
+
+    // scroll-spy
+    const links = [...nav.querySelectorAll("a")];
+    const byId = Object.fromEntries(links.map((l) => [l.dataset.slug, l]));
+    const spy = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            links.forEach((l) => l.classList.remove("active"));
+            const active = byId[e.target.id];
+            if (active) {
+              active.classList.add("active");
+              if (nav.scrollWidth > nav.clientWidth + 4) {
+                active.scrollIntoView({ block: "nearest", inline: "center", behavior: "smooth" });
+              }
+            }
+          }
+        });
+      },
+      { rootMargin: "-45% 0px -50% 0px", threshold: 0 }
+    );
+    document.querySelectorAll(".chapter").forEach((s) => spy.observe(s));
+    links.forEach((link) => {
+      link.addEventListener("click", () => {
+        if (window.innerWidth <= 760 && nav.scrollWidth > nav.clientWidth + 4) {
+          link.scrollIntoView({ block: "nearest", inline: "center", behavior: "smooth" });
+        }
+      });
+    });
+
+    // lightbox
+    const lb = document.getElementById("lb");
+    const lbImg = document.getElementById("lbImg");
+    document.querySelectorAll(".frame").forEach((f) => {
+      f.addEventListener("click", () => {
+        lbImg.src = f.dataset.src;
+        lb.classList.add("open");
+        document.body.style.overflow = "hidden";
+      });
+    });
+    function closeLb() {
+      lb.classList.remove("open");
+      lbImg.src = "";
+      document.body.style.overflow = "";
+    }
+    lb.addEventListener("click", closeLb);
+    document.getElementById("lbClose").addEventListener("click", closeLb);
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeLb(); });
+  </script>
+</body>
+</html>
